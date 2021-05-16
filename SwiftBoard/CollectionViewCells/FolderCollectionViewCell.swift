@@ -35,32 +35,32 @@ class FolderCollectionViewCell : ItemViewModelCell, FolderViewModelDelegate {
     weak var folderViewModel: FolderViewModel? {
         didSet {
             if let myViewModel = folderViewModel {
-                hidden = myViewModel.dragging
+                isHidden = myViewModel.dragging
                 editing = myViewModel.editing
                 zoomed = myViewModel.zoomed
                 label.text = myViewModel.name
                 collectionView.folderViewModel = myViewModel
                 myViewModel.folderViewModelDelegate = self
             } else {
-                hidden = false
+                isHidden = false
             }
         }
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        collectionView.backgroundColor = UIColor.clearColor()
+        collectionView.backgroundColor = UIColor.clear
         expandingView.layer.cornerRadius = 5
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        hidden = false
+        isHidden = false
     }
     
-    override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes!) {
-        super.applyLayoutAttributes(layoutAttributes)
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes?) {
+        super.apply(layoutAttributes ?? UICollectionViewLayoutAttributes())
     
         if zoomed {
             topConstraint.constant = 10
@@ -87,14 +87,14 @@ class FolderCollectionViewCell : ItemViewModelCell, FolderViewModelDelegate {
     }
     
     func expand() {
-        UIView.animateWithDuration(0.4) {
+        UIView.animate(withDuration: 0.4) {
             self.expandingView.layer.transform = CATransform3DMakeScale(1.2, 1.2, 1)
             self.label.alpha = 0
         }
     }
     
     func collapse() {
-        UIView.animateWithDuration(0.4) {
+        UIView.animate(withDuration: 0.4) {
             self.expandingView.layer.transform = CATransform3DIdentity
             self.label.alpha = 1
         }
@@ -102,35 +102,35 @@ class FolderCollectionViewCell : ItemViewModelCell, FolderViewModelDelegate {
     
     func startFlickering() {
         let anim = CABasicAnimation(keyPath: "backgroundColor")
-        anim.toValue = UIColor.darkGrayColor().CGColor
+        anim.toValue = UIColor.darkGray.cgColor
         anim.autoreverses = true
         anim.duration = 0.1
         anim.repeatCount = HUGE
         
-        expandingView.layer.addAnimation(anim, forKey:flickeringAnimationKey);
+        expandingView.layer.add(anim, forKey:flickeringAnimationKey);
     }
     
     func stopFlickering() {
-        expandingView.layer.removeAnimationForKey(flickeringAnimationKey)
+        expandingView.layer.removeAnimation(forKey: flickeringAnimationKey)
     }
     
     // FolderViewModelDelegate
     
-    func folderViewModelDraggingDidChange(newValue: Bool) {
-        hidden = newValue
+    func folderViewModelDraggingDidChange(_ newValue: Bool) {
+        isHidden = newValue
     }
         
-    func folderViewModelEditingDidChange(newValue: Bool) {
+    func folderViewModelEditingDidChange(_ newValue: Bool) {
         editing = newValue
         updateJiggling()
     }
     
-    func folderViewModelZoomedDidChange(newValue: Bool) {
+    func folderViewModelZoomedDidChange(_ newValue: Bool) {
         zoomed = newValue
         updateJiggling()
     }
     
-    func folderViewModelStateDidChange(state: FolderViewModelState) {
+    func folderViewModelStateDidChange(_ state: FolderViewModelState) {
         switch state {
         case .Closed:
             expanded = false

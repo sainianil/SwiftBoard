@@ -15,15 +15,15 @@ class FolderCollectionViewLayout: DroppableCollectionViewLayout {
     var numberOfItems = 0
     var updating = false
     
-    override func collectionViewContentSize() -> CGSize {
+    override var collectionViewContentSize: CGSize {
         if let myCollectionView = collectionView {
             return myCollectionView.bounds.size
         } else {
-            return CGSizeZero
+            return CGSize.zero
         }
     }
     
-    override func prepareLayout() {
+    override func prepare() {
         if collectionView == nil {
             return
         }
@@ -32,7 +32,7 @@ class FolderCollectionViewLayout: DroppableCollectionViewLayout {
         itemsPerRow = 3
         
         let myCollectionView = collectionView!
-        numberOfItems = myCollectionView.numberOfItemsInSection(0)
+        numberOfItems = myCollectionView.numberOfItems(inSection: 0)
         
         let itemsToLayout = numberOfItems > 9 ? 9 : numberOfItems
         let availableWidth = myCollectionView.bounds.width
@@ -41,33 +41,33 @@ class FolderCollectionViewLayout: DroppableCollectionViewLayout {
         itemFrames = []
         
         for i in 0..<itemsToLayout {
-            var row = CGFloat(i / 3)
-            var column = CGFloat(i % 3)
+            let row = CGFloat(i / 3)
+            let column = CGFloat(i % 3)
             
-            var rect = CGRect(x: column*itemSize, y: row*itemSize, width: itemSize, height: itemSize)
+            let rect = CGRect(x: column*itemSize, y: row*itemSize, width: itemSize, height: itemSize)
             itemFrames.append(rect)
         }
     }
     
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var attributes: [UICollectionViewLayoutAttributes] = []
         
-        if let myCollectionView = collectionView {
+        if collectionView != nil {
             for itemIndex in 0..<numberOfItems {
-                attributes.append(layoutAttributesForItemAtIndexPath(itemIndex.toIndexPath()))
+                attributes.append(layoutAttributesForItem(at: itemIndex.toIndexPath()) ?? UICollectionViewLayoutAttributes())
             }
         }
         
         return attributes;
     }
     
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        let itemAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let itemAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath as IndexPath)
         
         if indexPath.item < 9 {
             itemAttributes.frame = itemFrames[indexPath.item]
         } else {
-            itemAttributes.hidden = true
+            itemAttributes.isHidden = true
         }
         
         return itemAttributes
@@ -75,7 +75,7 @@ class FolderCollectionViewLayout: DroppableCollectionViewLayout {
     
     // Set a flag to indicate we're adding/removing items. The initial/final layout attribute methods need to use
     // the default behaviour in this case... and has special code for animating a bounds change.
-    override func prepareForCollectionViewUpdates(updateItems: [AnyObject]!) {
+    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         updating = true
     }
     
@@ -83,33 +83,33 @@ class FolderCollectionViewLayout: DroppableCollectionViewLayout {
         updating = false
     }
     
-    override func initialLayoutAttributesForAppearingItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+    override func initialLayoutAttributesForAppearingItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         if (updating) {
-            return super.initialLayoutAttributesForAppearingItemAtIndexPath(indexPath)
+            return super.initialLayoutAttributesForAppearingItem(at: indexPath as IndexPath)
         } else {
             // When the bounds change, all items are "removed" from view then re-"added" if they're still visible. Provide their
             // original frame so the change will be animated.
-            let itemAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+            let itemAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath as IndexPath)
             
             if indexPath.item < 9 {
                 itemAttributes.frame = previousItemFrames[indexPath.item]
             } else {
-                itemAttributes.hidden = true
+                itemAttributes.isHidden = true
             }
             
             return itemAttributes
         }
     }
     
-    override func finalLayoutAttributesForDisappearingItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+    override func finalLayoutAttributesForDisappearingItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         if (updating) {
-            return super.finalLayoutAttributesForDisappearingItemAtIndexPath(indexPath)
+            return super.finalLayoutAttributesForDisappearingItem(at: indexPath as IndexPath)
         } else {
             return nil
         }
     }
     
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
 }

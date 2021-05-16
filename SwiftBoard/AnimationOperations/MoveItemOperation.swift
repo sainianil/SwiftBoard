@@ -20,12 +20,12 @@ class MoveItemOperation: AsyncOperation {
     }
     
     override func start() {
-        executing = true
+        isExecuting = true
         
         collectionView.performBatchUpdates({ () -> Void in
-            self.collectionView.moveItemAtIndexPath(self.fromIndex.toIndexPath(), toIndexPath: self.toIndex.toIndexPath())
+            self.collectionView.moveItem(at: self.fromIndex.toIndexPath(), to: self.toIndex.toIndexPath())
         }, completion: { (didComplete: Bool) -> Void in
-            self.finished = true
+            self.isFinished = true
         })
     }
 }

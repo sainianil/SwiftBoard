@@ -21,8 +21,8 @@ class RootViewModel: ListViewModel {
     
     var editingModeEnabled: Bool = false {
         didSet {
-            for var i = 0; i < numberOfItems(); i++ {
-                let item = itemAtIndex(i)
+            for i in 0..<numberOfItems() {
+                let item = itemAtIndex(index: i)
                 item.editing = editingModeEnabled
             }
         }
@@ -32,40 +32,40 @@ class RootViewModel: ListViewModel {
         didSet {
             let zoomed = openFolderViewModel != nil
             
-            for var i = 0; i < numberOfItems(); i++ {
-                let item = itemAtIndex(i)
+            for i in 0..<numberOfItems() {
+                let item = itemAtIndex(index: i)
                 item.zoomed = zoomed
             }
         }
     }
     
     func moveAppToFolder(appViewModel: AppViewModel, folderViewModel: FolderViewModel, open: Bool) {
-        if let index = indexOfItem(appViewModel) {
-            rootViewModelDelegate?.rootViewModelWillMoveAppToFolder(appViewModel, folderViewModel: folderViewModel, open: open)
+        if let index = indexOfItem(item: appViewModel) {
+            rootViewModelDelegate?.rootViewModelWillMoveAppToFolder(appViewModel: appViewModel, folderViewModel: folderViewModel, open: open)
             
-            let addIndex = folderViewModel.numberOfItems()
+//            let addIndex = folderViewModel.numberOfItems()
             
             appViewModel.parentListViewModel = folderViewModel
-            removeItemAtIndex(index)
-            folderViewModel.appendItem(appViewModel)
+            removeItemAtIndex(index: index)
+            folderViewModel.appendItem(itemViewModel: appViewModel)
             
             if open {
-                openFolder(folderViewModel)
+                openFolder(folderViewModel: folderViewModel)
             }
             
-            rootViewModelDelegate?.rootViewModelDidMoveAppToFolder(appViewModel, folderViewModel: folderViewModel, open: open)
+            rootViewModelDelegate?.rootViewModelDidMoveAppToFolder(appViewModel: appViewModel, folderViewModel: folderViewModel, open: open)
         } else {
             assertionFailure("moveAppToFolder: AppViewModel isn't in the RootViewModel")
         }
     }
     
     func moveAppFromFolder(appViewModel: AppViewModel, folderViewModel: FolderViewModel) {
-        if let removeIndex = folderViewModel.indexOfItem(appViewModel) {
-            let addIndex = numberOfItems()
+        if let removeIndex = folderViewModel.indexOfItem(item: appViewModel) {
+//            let addIndex = numberOfItems()
             
             appViewModel.parentListViewModel = self
-            folderViewModel.removeItemAtIndex(removeIndex)
-            appendItem(appViewModel)
+            folderViewModel.removeItemAtIndex(index: removeIndex)
+            appendItem(itemViewModel: appViewModel)
         } else {
             assertionFailure("moveAppFromFolder: AppViewModel isn't in the FolderViewModel")
         }
@@ -76,7 +76,7 @@ class RootViewModel: ListViewModel {
             openFolderViewModel = folderViewModel
             
             folderViewModel.state = .Open
-            rootViewModelDelegate?.rootViewModelFolderOpened(folderViewModel)
+            rootViewModelDelegate?.rootViewModelFolderOpened(folderViewModel: folderViewModel)
         } else {
             assertionFailure("openFolder: Tried to open a folder when another is open.")
         }
@@ -87,7 +87,7 @@ class RootViewModel: ListViewModel {
             openFolderViewModel = nil
             
             folderViewModel.state = .Closed
-            rootViewModelDelegate?.rootViewModelFolderClosed(folderViewModel)
+            rootViewModelDelegate?.rootViewModelFolderClosed(folderViewModel: folderViewModel)
         } else {
             assertionFailure("closeFolder: Tried to close a folder when no folder is open.")
         }

@@ -9,10 +9,10 @@
 import UIKit
 
 protocol AppViewModelDelegate: class {
-    func appViewModelDraggingDidChange(Bool)
-    func appViewModelDeletingDidChange(Bool)
-    func appViewModelEditingDidChange(Bool)
-    func appViewModelZoomedDidChange(Bool)
+    func appViewModelDraggingDidChange(_: Bool)
+    func appViewModelDeletingDidChange(_: Bool)
+    func appViewModelEditingDidChange(_: Bool)
+    func appViewModelZoomedDidChange(_: Bool)
 }
 
 class AppViewModel: ItemViewModel {
@@ -52,9 +52,9 @@ class AppViewModel: ItemViewModel {
     }
     
     func delete() {
-        if let index = parentListViewModel?.indexOfItem(self) {
+        if let index = parentListViewModel?.indexOfItem(item: self) {
             deleting = true
-            parentListViewModel?.removeItemAtIndex(index)
+            parentListViewModel?.removeItemAtIndex(index: index)
         }
     }
 }

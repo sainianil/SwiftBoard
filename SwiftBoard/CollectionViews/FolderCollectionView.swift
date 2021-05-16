@@ -34,6 +34,6 @@ class FolderCollectionView: ListViewModelCollectionView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        registerNib(UINib(nibName: "AppCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "App")
+        register(UINib(nibName: "AppCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "App")
     }
 }

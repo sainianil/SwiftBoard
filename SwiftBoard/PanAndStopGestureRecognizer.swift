@@ -11,11 +11,11 @@ import UIKit
 class PanAndStopGestureRecognizer: UIPanGestureRecognizer {
     let stopAfterSecondsWithoutMovement: Double
     
-    private var stopTimer: NSTimer?
-    private var stopFunction:PanAndStopGestureRecognizer -> ()
+    private var stopTimer: Timer?
+    private var stopFunction:(PanAndStopGestureRecognizer) -> ()
     private var lastLocation:CGPoint
     
-    init(target:AnyObject, action:Selector, stopAfterSecondsWithoutMovement stopAfterSeconds:Double, stopFunction stopFn:PanAndStopGestureRecognizer -> ()) {
+    init(target:AnyObject, action:Selector, stopAfterSecondsWithoutMovement stopAfterSeconds:Double, stopFunction stopFn: @escaping (PanAndStopGestureRecognizer) -> ()) {
         stopAfterSecondsWithoutMovement = stopAfterSeconds
         stopFunction = stopFn
         lastLocation = CGPoint(x:0, y:0)
@@ -23,13 +23,13 @@ class PanAndStopGestureRecognizer: UIPanGestureRecognizer {
         super.init(target: target, action: action)
     }
     
-    override func touchesMoved(touches:NSSet, withEvent event:UIEvent) {
-        super.touchesMoved(touches, withEvent: event)
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesMoved(touches, with: event)
         stopTimer?.invalidate()
         
-        if state == .Began || state == .Changed {
-            lastLocation = locationInView(view!)
-            stopTimer = NSTimer.scheduledTimerWithTimeInterval(stopAfterSecondsWithoutMovement, target: self, selector: "callStopFunction", userInfo: nil, repeats: false)
+        if state == .began || state == .changed {
+            lastLocation = location(in: view!)
+            stopTimer = Timer.scheduledTimer(timeInterval: stopAfterSecondsWithoutMovement, target: self, selector: Selector(("callStopFunction")), userInfo: nil, repeats: false)
         }
     }
     

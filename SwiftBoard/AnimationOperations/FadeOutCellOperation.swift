@@ -16,12 +16,12 @@ class FadeOutCellOperation: AsyncOperation {
     }
     
     override func start() {
-        executing = true
+        isExecuting = true
         
-        UIView.animateWithDuration(0.4, animations: { () -> Void in
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
             self.collectionViewCell.alpha = 0
         }, completion: { (Bool) -> Void in
-            self.finished = true
+            self.isFinished = true
         })
     }
 }

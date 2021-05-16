@@ -18,12 +18,12 @@ class RemoveItemOperation: AsyncOperation {
     }
     
     override func start() {
-        executing = true
+        isExecuting = true
         
         collectionView.performBatchUpdates({ () -> Void in
-            self.collectionView.deleteItemsAtIndexPaths([self.index.toIndexPath()])
+            self.collectionView.deleteItems(at: [self.index.toIndexPath()])
         }, completion: { (didComplete: Bool) -> Void in
-            self.finished = true
+            self.isFinished = true
         })
     }
 }

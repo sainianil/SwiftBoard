@@ -18,10 +18,10 @@ class SetLayoutOperation: AsyncOperation {
     }
     
     override func start() {
-        executing = true
+        isExecuting = true
         
         collectionView.setCollectionViewLayout(layout, animated: true) { (didComplete: Bool) -> Void in
-            self.finished = true
+            self.isFinished = true
         }
     }
 }

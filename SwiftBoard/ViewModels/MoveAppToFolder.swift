@@ -16,7 +16,7 @@ class MoveAppToFolder: NSObject, DragAndDropOperation {
     let appViewModel: AppViewModel
     let folderViewModel: FolderViewModel
     
-    private var openFolderTimer: NSTimer?
+    private var openFolderTimer: Timer?
     
     init(rootViewModel initRoot: RootViewModel, appViewModel initApp: AppViewModel, folderViewModel initFolder: FolderViewModel) {
         rootViewModel = initRoot
@@ -26,7 +26,7 @@ class MoveAppToFolder: NSObject, DragAndDropOperation {
     
     func dragStart() {
         folderViewModel.state = .AppHovering
-        openFolderTimer = NSTimer.scheduledTimerWithTimeInterval(prepareToOpenFolderAfterSeconds, target: self, selector: "prepareToOpenFolder", userInfo: nil, repeats: false)
+        openFolderTimer = Timer.scheduledTimer(timeInterval: prepareToOpenFolderAfterSeconds, target: self, selector: Selector(("prepareToOpenFolder")), userInfo: nil, repeats: false)
     }
     
     func dragCancel() {
@@ -36,7 +36,7 @@ class MoveAppToFolder: NSObject, DragAndDropOperation {
     
     func drop() {
         cancelTimer()
-        rootViewModel.moveAppToFolder(appViewModel, folderViewModel: folderViewModel, open: false)
+        rootViewModel.moveAppToFolder(appViewModel: appViewModel, folderViewModel: folderViewModel, open: false)
         folderViewModel.state = .Closed
     }
     
@@ -44,13 +44,13 @@ class MoveAppToFolder: NSObject, DragAndDropOperation {
         cancelTimer()
         
         folderViewModel.state = .PreparingToOpen
-        openFolderTimer = NSTimer.scheduledTimerWithTimeInterval(openFolderAfterSeconds, target: self, selector: "openFolder", userInfo: nil, repeats: false)
+        openFolderTimer = Timer.scheduledTimer(timeInterval: openFolderAfterSeconds, target: self, selector: Selector(("openFolder")), userInfo: nil, repeats: false)
     }
     
     func openFolder() {
         cancelTimer()
         
-        rootViewModel.moveAppToFolder(appViewModel, folderViewModel: folderViewModel, open: true)
+        rootViewModel.moveAppToFolder(appViewModel: appViewModel, folderViewModel: folderViewModel, open: true)
     }
     
     private func cancelTimer() {

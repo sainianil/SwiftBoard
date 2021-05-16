@@ -22,22 +22,22 @@ class ListViewModelDataSource : NSObject, UICollectionViewDelegate, UICollection
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return listViewModel.numberOfItems()
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell:UICollectionViewCell
-        var itemViewModel = listViewModel.itemAtIndex(indexPath.item)
+        let itemViewModel = listViewModel.itemAtIndex(index: indexPath.item)
         
         switch itemViewModel {
         case let appViewModel as AppViewModel:
-            let myCell = collectionView.dequeueReusableCellWithReuseIdentifier("App", forIndexPath: indexPath) as AppCollectionViewCell
+            let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: "App", for: indexPath as IndexPath) as! AppCollectionViewCell
             myCell.appViewModel = appViewModel
                         
             cell = myCell
         case let folderViewModel as FolderViewModel:
-            let myCell = collectionView.dequeueReusableCellWithReuseIdentifier("Folder", forIndexPath: indexPath) as FolderCollectionViewCell
+            let myCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Folder", for: indexPath as IndexPath) as! FolderCollectionViewCell
             myCell.folderViewModel = folderViewModel
             
             cell = myCell

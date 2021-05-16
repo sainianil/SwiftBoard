@@ -16,7 +16,7 @@ class ItemViewModelCell : UICollectionViewCell {
             updateJiggling()
             
             let animated = oldValue != editing
-            editing ? showDeleteButton(animated) : hideDeleteButton(animated)
+            editing ? showDeleteButton(animated: animated) : hideDeleteButton(animated: animated)
         }
     }
     
@@ -37,17 +37,17 @@ class ItemViewModelCell : UICollectionViewCell {
     }
     
     func startJiggling() {
-        self.layer.addAnimation(jigglingAnimation(), forKey:jigglingAnimationKey);
+        self.layer.add(jigglingAnimation(), forKey:jigglingAnimationKey);
     }
     
     func stopJiggling() {
-        self.layer.removeAnimationForKey(jigglingAnimationKey)
+        self.layer.removeAnimation(forKey: jigglingAnimationKey)
     }
     
     func jigglingAnimation() -> CABasicAnimation {
         let anim = CABasicAnimation(keyPath:"transform.rotation")
-        anim.fromValue = -M_PI / 48
-        anim.toValue = M_PI / 48
+        anim.fromValue = -Double.pi / 48
+        anim.toValue = Double.pi / 48
         anim.autoreverses = true
         anim.duration = 0.2
         anim.repeatCount = HUGE

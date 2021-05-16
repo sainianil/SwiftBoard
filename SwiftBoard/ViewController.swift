@@ -13,8 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var rootCollectionView: RootCollectionView!
     var rootViewModel: RootViewModel?
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
     
     override func viewDidLoad() {

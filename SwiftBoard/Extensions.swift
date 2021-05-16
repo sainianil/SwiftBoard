@@ -9,7 +9,7 @@
 import UIKit
 
 extension Int {
-    func toIndexPath() -> NSIndexPath {
-        return NSIndexPath(forItem: self, inSection: 0)
+    func toIndexPath() -> IndexPath {
+        return IndexPath(item: self, section: 0)
     }
 }

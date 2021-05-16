@@ -22,14 +22,14 @@ class AppCollectionViewCell : ItemViewModelCell, AppViewModelDelegate {
     weak var appViewModel: AppViewModel? {
         didSet {
             if let myViewModel = appViewModel {
-                hidden = myViewModel.dragging
+                isHidden = myViewModel.dragging
                 editing = myViewModel.editing
                 zoomed = myViewModel.zoomed
                 label.text = myViewModel.name
                 containerView.backgroundColor = myViewModel.color
                 myViewModel.delegate = self
             } else {
-                hidden = false
+                isHidden = false
             }
         }
     }
@@ -46,8 +46,8 @@ class AppCollectionViewCell : ItemViewModelCell, AppViewModelDelegate {
         deleteButton.layer.cornerRadius = 11
     }
     
-    override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes!) {
-        super.applyLayoutAttributes(layoutAttributes)
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
         
         if zoomed {
             updateConstraintsZoomed()
@@ -71,27 +71,27 @@ class AppCollectionViewCell : ItemViewModelCell, AppViewModelDelegate {
     }
     
     override func showDeleteButton(animated: Bool) {
-        deleteButton.hidden = false
+        deleteButton.isHidden = false
         
         if animated {
-            deleteButton.transform = CGAffineTransformMakeScale(0.01, 0.01)
+            deleteButton.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
             
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                self.deleteButton.transform = CGAffineTransformIdentity
+            UIView.animate(withDuration: 0.2, animations: { () -> Void in
+                self.deleteButton.transform = CGAffineTransform.identity
             })
         }
     }
     
     override func hideDeleteButton(animated: Bool) {
         if animated {
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                self.deleteButton.transform = CGAffineTransformMakeScale(0.01, 0.01)
+            UIView.animate(withDuration: 0.2, animations: { () -> Void in
+                self.deleteButton.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
             }, completion: { (finished: Bool) -> Void in
-                self.deleteButton.hidden = true
-                self.deleteButton.transform = CGAffineTransformIdentity
+                self.deleteButton.isHidden = true
+                self.deleteButton.transform = CGAffineTransform.identity
             })
         } else {
-            self.deleteButton.hidden = true
+            self.deleteButton.isHidden = true
         }
     }
     
@@ -128,22 +128,22 @@ class AppCollectionViewCell : ItemViewModelCell, AppViewModelDelegate {
     
     // MARK: AppViewModelDelegate
     
-    func appViewModelDraggingDidChange(newValue: Bool) {
-        hidden = newValue
+    func appViewModelDraggingDidChange(_ newValue: Bool) {
+        isHidden = newValue
     }
     
-    func appViewModelDeletingDidChange(newValue: Bool) {
+    func appViewModelDeletingDidChange(_ newValue: Bool) {
         if newValue {
             let op = FadeOutCellOperation(self)
-            NSOperationQueue.mainQueue().addOperation(op)
+            OperationQueue.main.addOperation(op)
         }
     }
     
-    func appViewModelEditingDidChange(newValue: Bool) {
+    func appViewModelEditingDidChange(_ newValue: Bool) {
         editing = newValue
     }
     
-    func appViewModelZoomedDidChange(newValue: Bool) {
+    func appViewModelZoomedDidChange(_ newValue: Bool) {
         zoomed = newValue
     }
 }

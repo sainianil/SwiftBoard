@@ -35,7 +35,7 @@ class ListViewModel {
     }
     
     func indexOfItem(item: ItemViewModel) -> Int? {
-        for (index, compareItem) in enumerate(viewModels) {
+        for (index, compareItem) in viewModels.enumerated() {
             if item === compareItem {
                 return index
             }
@@ -45,21 +45,21 @@ class ListViewModel {
     }
     
     func moveItemAtIndex(fromIndex: Int, toIndex: Int) {
-        var item: ItemViewModel = viewModels[fromIndex]
-        viewModels.removeAtIndex(fromIndex)
-        viewModels.insert(item, atIndex: toIndex)
+        let item: ItemViewModel = viewModels[fromIndex]
+        viewModels.remove(at: fromIndex)
+        viewModels.insert(item, at: toIndex)
         
-        listViewModelDelegate?.listViewModelItemMoved(fromIndex, toIndex: toIndex)
+        listViewModelDelegate?.listViewModelItemMoved(fromIndex: fromIndex, toIndex: toIndex)
     }
     
     func removeItemAtIndex(index: Int)  {
-        viewModels.removeAtIndex(index)
-        listViewModelDelegate?.listViewModelItemRemovedAtIndex(index)
+        viewModels.remove(at: index)
+        listViewModelDelegate?.listViewModelItemRemovedAtIndex(index: index)
     }
     
     func appendItem(itemViewModel: ItemViewModel) {
         let index = viewModels.count
         viewModels.append(itemViewModel)
-        listViewModelDelegate?.listViewModelItemAddedAtIndex(index)
+        listViewModelDelegate?.listViewModelItemAddedAtIndex(index: index)
     }
 }

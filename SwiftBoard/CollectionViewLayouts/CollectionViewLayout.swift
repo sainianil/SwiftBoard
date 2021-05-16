@@ -24,14 +24,14 @@ class CollectionViewLayout: DroppableCollectionViewLayout {
             return cv.bounds.size
         }
         
-        return CGSizeZero
+        return CGSize.zero
     }
     
-    override func collectionViewContentSize() -> CGSize {
+    override var collectionViewContentSize: CGSize {
         return getSize()
     }
     
-    override func prepareLayout() {
+    override func prepare() {
         if collectionView == nil {
             return
         }
@@ -53,7 +53,7 @@ class CollectionViewLayout: DroppableCollectionViewLayout {
         var rowOffset = myItemWidth + heightPadding
         var columnOffset = myItemWidth
         
-        if let zoomIndex = zoomToIndex {
+        if zoomToIndex != nil {
             if availableWidth < availableHeight {
                 zoomedSize = availableWidth - 10
                 rowOffset = zoomedSize + (availableHeight - zoomedSize) / 2 + heightPadding
@@ -66,9 +66,9 @@ class CollectionViewLayout: DroppableCollectionViewLayout {
         }
 
         itemFrames = []
-        numberOfItems = myCollectionView.numberOfItemsInSection(0)
+        numberOfItems = myCollectionView.numberOfItems(inSection: 0)
         
-        for itemIndex in 0..<numberOfItems {
+        for _ in 0..<numberOfItems {
             let itemFrame = CGRect(x: left, y: top, width: zoomedSize, height: zoomedSize + heightPadding)
             itemFrames.append(itemFrame)
             
@@ -83,36 +83,36 @@ class CollectionViewLayout: DroppableCollectionViewLayout {
         }
         
         if let zoomIndex = zoomToIndex {
-            var frame = itemFrames[zoomIndex]
-            var transform = CGAffineTransformMakeTranslation(-frame.origin.x, -frame.origin.y)
-            transform = CGAffineTransformTranslate(transform, (availableWidth - zoomedSize) / 2, (availableHeight - zoomedSize) / 2)
+            let frame = itemFrames[zoomIndex]
+            var transform = CGAffineTransform(translationX: -frame.origin.x, y: -frame.origin.y)
+            transform = transform.translatedBy(x: (availableWidth - zoomedSize) / 2, y: (availableHeight - zoomedSize) / 2)
             
             for itemIndex in 0..<numberOfItems {
-                itemFrames[itemIndex] = CGRectApplyAffineTransform(itemFrames[itemIndex], transform)
+                itemFrames[itemIndex] = itemFrames[itemIndex].applying(transform)
             }
         }
     }
     
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var attributes: [UICollectionViewLayoutAttributes] = []
         
-        if let myCollectionView = collectionView {
+        if collectionView != nil {
             for itemIndex in 0..<numberOfItems {
-                attributes.append(layoutAttributesForItemAtIndexPath(itemIndex.toIndexPath()))
+                attributes.append(layoutAttributesForItem(at: itemIndex.toIndexPath())!)
             }
         }
         
         return attributes;
     }
     
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        let itemAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let itemAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath as IndexPath)
         itemAttributes.frame = itemFrames[indexPath.item]
         
         return itemAttributes
     }
     
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }    
 }

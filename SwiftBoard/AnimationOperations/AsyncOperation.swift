@@ -8,28 +8,28 @@
 
 import Foundation
 
-class AsyncOperation: NSOperation {
+class AsyncOperation: Operation {
     private var _executing = false
-    override var executing: Bool {
+    override var isExecuting: Bool {
         get {
             return _executing
         }
         set {
-            willChangeValueForKey("isExecuting")
+            willChangeValue(forKey: "isExecuting")
             _executing = newValue
-            didChangeValueForKey("isExecuting")
+            didChangeValue(forKey: "isExecuting")
         }
     }
     
     private var _finished = false
-    override var finished: Bool {
+    override var isFinished: Bool {
         get {
             return _finished
         }
         set {
-            willChangeValueForKey("isFinished")
+            willChangeValue(forKey: "isFinished")
             _finished = newValue
-            didChangeValueForKey("isFinished")
+            didChangeValue(forKey: "isFinished")
         }
     }
 }

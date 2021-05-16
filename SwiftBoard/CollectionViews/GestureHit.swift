@@ -34,7 +34,7 @@ class CellGestureHit: GestureHit {
     }
 }
 
-class AppGestureHit: CellGestureHit, GestureHit {
+class AppGestureHit: CellGestureHit {
     let appViewModel: AppViewModel
     
     init(collectionViewHit initHit: CollectionViewGestureHit, cell initCell: ItemViewModelCell, locationInCell initCellLocation: CGPoint, appViewModel initApp: AppViewModel) {
@@ -43,7 +43,7 @@ class AppGestureHit: CellGestureHit, GestureHit {
     }
 }
 
-class FolderGestureHit: CellGestureHit, GestureHit {
+class FolderGestureHit: CellGestureHit {
     let folderViewModel: FolderViewModel
     
     init(collectionViewHit initHit: CollectionViewGestureHit, cell initCell: ItemViewModelCell, locationInCell initCellLocation: CGPoint, folderViewModel initFolder: FolderViewModel) {

@@ -18,7 +18,7 @@ class ListViewModelCollectionView: UICollectionView, ListViewModelDelegate {
         let op = MoveItemOperation(collectionView: self, fromIndex: fromIndex, toIndex: toIndex)
         
         if deferAnimations {
-            NSOperationQueue.mainQueue().addOperation(op)
+            OperationQueue.main.addOperation(op)
         } else {
             op.start()
         }
@@ -28,7 +28,7 @@ class ListViewModelCollectionView: UICollectionView, ListViewModelDelegate {
         let op = AddItemOperation(collectionView: self, index: index)
         
         if deferAnimations {
-            NSOperationQueue.mainQueue().addOperation(op)
+            OperationQueue.main.addOperation(op)
         } else {
             op.start()
         }
@@ -38,7 +38,7 @@ class ListViewModelCollectionView: UICollectionView, ListViewModelDelegate {
         let op = RemoveItemOperation(collectionView: self, index: index)
         
         if deferAnimations {
-            NSOperationQueue.mainQueue().addOperation(op)
+            OperationQueue.main.addOperation(op)
         } else {
             op.start()
         }

@@ -20,6 +20,6 @@ class MoveItemInList: DragOperation {
     }
     
     func dragStart() {
-        listViewModel.moveItemAtIndex(fromIndex, toIndex: toIndex)
+        listViewModel.moveItemAtIndex(fromIndex: fromIndex, toIndex: toIndex)
     }
 }
